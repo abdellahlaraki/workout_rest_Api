@@ -1,10 +1,12 @@
 // import dotenv to  loads environment variables from a .env file into process.env
 require("dotenv").config();
-const cors=require("cors");
+const cors = require("cors");
 // import mongoose
 const mongoose = require("mongoose");
 // import express
 const express = require("express");
+// import errorhandler
+const errorMiddleware = require("./Middleware/errorMiddleware");
 // create an express app
 const app = express();
 // import user
@@ -16,6 +18,11 @@ app.use(cors());
 app.use(express.json());
 app.use("/api/workout", workoutrouter);
 app.use("/api", userouter);
+app.get("/",()=>{
+  throw new Error("fake error");
+})
+app.use(errorMiddleware);
+
 const port = process.env.PORT;
 mongoose
   .connect(process.env.MONGODB_URL)
